@@ -81,7 +81,11 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Benvenuto
+                    @if (Auth::check())
+                        Bentornato {{Auth::user()['name']}}
+                        @else
+                            Benvenuto
+                    @endif
                 </div>
 
                 <div class="links">
