@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -29,7 +30,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -40,7 +41,18 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post();
+        $data = $request->all();
+
+        $post->title = $data['title'];
+        $post->author = $data['author'];
+        $post->description = $data['description'];
+        $post->image_url = $data['image_url'];
+        $post->slug = Str::slug($post->title . '-');
+
+        $post->save();
+
+        return redirect()->route('andim.posts.show', $post->id)->with('message', 'Post creato con successo');
     }
 
     /**
@@ -60,9 +72,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -72,9 +84,16 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->all();
+        $post->title = $data['title'];
+        $post->author = $data['author'];
+        $post->description = $data['description'];
+        $post->image_url = $data['image_url'];
+        $post->slug = Str::slug($post->title . '-');
+        $post->save();
+        return redirect()->route('andim.posts.show', $post)->with('message', 'Post modificato con successo');
     }
 
     /**
@@ -83,8 +102,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('andim.posts.index', $post)->with('message', 'Il post è stato eliminato');
     }
 }

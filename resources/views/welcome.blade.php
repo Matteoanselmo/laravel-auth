@@ -43,7 +43,9 @@
             .content {
                 text-align: center;
             }
-
+            .text-capitalize{
+                text-transform: capitalize;
+            }
             .title {
                 font-size: 84px;
             }
@@ -80,9 +82,12 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
+                <div class="title m-b-md text-capitalize">
                     @if (Auth::check())
-                        Bentornato {{Auth::user()['name']}}
+                        Bentornato
+                        <p class="text-capitalize">
+                            {{Auth::user()['name']}}
+                        </p>
                         @else
                             Benvenuto
                     @endif
